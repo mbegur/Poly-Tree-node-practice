@@ -54,25 +54,42 @@ class PolyTreeNode
     nil
   end
 
-  # def bfs(target_value)
-  #   queue = [self]
-  #   queue.each do |node|
-  #     return node if node.value == target_value
-  #     queue.concat(node.children)
-  #     queue.shift
-  #   end
-  #   nil
-  # end
-
 
 end
 
 
-# n1 = PolyTreeNode.new("root1",)
-# n2 = PolyTreeNode.new("root2", [n4, n5], n1)
-# n3 = PolyTreeNode.new("root3", [n6], n1)
-# n4 = PolyTreeNode.new("root4", [], n2)
-# n5 = PolyTreeNode.new("root5", [], n2)
-# n6 = PolyTreeNode.new("root6", [], n3)
-#
-# n1.dfs(n4.value)
+class KnightPathFinder
+
+  def initialize(current_position)
+    @current_position = current_position
+    @visited_postions = []
+  end
+
+  DELTAS = [
+  [1, 2],
+  [-1, 2],
+  [1, -2],
+  [-1, -2],
+  [2, 1],
+  [-2, 1],
+  [2, -1],
+  [-2, -1] ]
+
+  def generate_positions(pos)
+    result = []
+    DELTAS.each do | coord |
+      result << [coord[0] + pos[0], coord[1] + pos[1]]
+    end
+    result
+  end
+
+  def self.valid_moves(pos)
+    unvisited_pos = generate_positions(pos).reject do |coord|
+      @visited_positions.include?(coord)
+    end
+    unvisited_pos.reject { |coord| coord.max > 7 && coord.min < 0}
+  end
+
+
+
+end
