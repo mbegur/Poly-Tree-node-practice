@@ -21,9 +21,13 @@ class PolyTreeNode
   end
 
   def remove_child(child_node)
-    #remove child from parent's @child_array
-    #deal with nil entry
-    #deal with not child removal -- raise error alert
+    if @children.include?(child_node)
+      @children.delete(child_node)
+      child_node.parent = nil
+    else
+      raise 'No such child exists'
+    end
+    
   end
 
 end
