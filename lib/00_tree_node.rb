@@ -62,7 +62,7 @@ class KnightPathFinder
 
   def initialize(current_position)
     @current_position = current_position
-    @visited_postions = []
+    @visited_positions = []
   end
 
   DELTAS = [
@@ -75,21 +75,39 @@ class KnightPathFinder
   [2, -1],
   [-2, -1] ]
 
-  def generate_positions(pos)
+  def self.valid_moves(pos)
     result = []
     DELTAS.each do | coord |
       result << [coord[0] + pos[0], coord[1] + pos[1]]
     end
-    result
+    result.reject { |coord| coord.max > 7 || coord.min < 0}
   end
 
-  def self.valid_moves(pos)
-    unvisited_pos = generate_positions(pos).reject do |coord|
+  def new_move_positions(pos)
+
+    KnightPathFinder.valid_moves(pos).reject do |coord|
       @visited_positions.include?(coord)
     end
-    unvisited_pos.reject { |coord| coord.max > 7 && coord.min < 0}
+
   end
 
+  def build_move_tree
+    queue = [@current_position]
 
+    until queue.empty?
+      next_node = PolyTreeNode.new(queue.shift)
+      next_pos = KnightPathFinder.new(next_node.value)
+
+      children = next_pos.new_move_positions(next_node.value)
+
+      children.each do |child|
+        next_node.add_child(child)
+        queue << child
+      end
+    end
+  end
 
 end
+
+p current = KnightPathFinder.new([0,0])
+p current.new_move_positions([1,2])
